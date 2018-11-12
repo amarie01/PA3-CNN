@@ -31,8 +31,10 @@ class Model2CNN(nn.Module):
     - The Conv2d layer uses a stride of 1 and 0 padding by default
     """
     
-    def __init__(self):
+    def __init__(self, skip_sigmoid=False):
         super(Model2CNN, self).__init__()
+        
+        self.skip_sigmoid = skip_sigmoid
         
         #---- First Block ------------------------------------------------------# 
         self.conv1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, padding=1)
@@ -159,6 +161,9 @@ class Model2CNN(nn.Module):
                                                                             
         # Connect fc1 to fc2 - this layer is slightly different than the rest (why?)
         batch = self.fc2(batch)
+        
+        if self.skip_sigmoid:
+            return batch
 
         # Return the class predictions
         # Apply an activition function to 'batch'
